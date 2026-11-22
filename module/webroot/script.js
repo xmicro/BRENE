@@ -304,8 +304,9 @@ function updateConfig(config, value) {
 // TEMP
 // Helper function to update config
 function updateConfig2(config, value) {
-	exec(`sed -i "s/^${config}=.*/${config}='${value}'/" ${PERSISTENT_DIR}/config.sh`).then((result) => {
+	return exec(`sed -i "s/^${config}=.*/${config}='${value}'/" ${PERSISTENT_DIR}/config.sh`).then((result) => {
 		if (result.errno !== 0) toast('Failed to update config')
+		return result
 	})
 }
 
@@ -345,6 +346,23 @@ exec(`cat ${PERSISTENT_DIR}/config.sh`).then((result) => {
 
 	// Verified Boot Hash
 	document.getElementById('vbh_text_field').value = configValues['config_spoof_verified_boot_hash']
+
+	// Optional security patch dates; the existing switches still control spoofing.
+	const patchDateFields = ['os_security_patch_date', 'vendor_security_patch_date']
+	patchDateFields.forEach((id) => {
+		const field = document.getElementById(id)
+		field.value = configValues[`config_${id}`] || ''
+		document.getElementById(`${id}_apply`).addEventListener('click', () => {
+			const value = field.value.trim()
+			if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+				toast('Use YYYY-MM-DD')
+				return
+			}
+			updateConfig2(`config_${id}`, value).then((result) => {
+				if (result.errno === 0) toast('Saved; reboot to apply')
+			})
+		})
+	})
 
 	// toggle
 	configs.forEach((config) => {
@@ -405,6 +423,7 @@ exec(`cat ${PERSISTENT_DIR}/config.sh`).then((result) => {
 					}
 				})
 
+				if (result.errno === 0) patchDateFields.forEach((id) => (document.getElementById(id).value = ''))
 				toast(result.errno === 0 ? 'Success' : result.stderr)
 			})
 		}
