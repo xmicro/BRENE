@@ -122,6 +122,10 @@ spoof_system_properties() {
 }
 
 spoof_os_security_patch_level_property() {
+	if [[ "${config_spoof_os_security_patch_level_property}" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]; then
+		if_prop_exits_resetprop_n "ro.build.version.security_patch" "${config_spoof_os_security_patch_level_property}"
+		return
+	fi
 	if [[ "${CURRENT_DAY}" -ge 5 ]]; then
 		if_prop_exits_resetprop_n "ro.build.version.security_patch" "${CURRENT_YEAR}-${CURRENT_MONTH}-01"
 	else
@@ -134,6 +138,10 @@ spoof_os_security_patch_level_property() {
 }
 
 spoof_vendor_security_patch_level_property() {
+	if [[ "${config_spoof_vendor_security_patch_level_property}" =~ ^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]; then
+		if_prop_exits_resetprop_n "ro.vendor.build.security_patch" "${config_spoof_vendor_security_patch_level_property}"
+		return
+	fi
 	if [[ "${CURRENT_DAY}" -ge 5 ]]; then
 		if_prop_exits_resetprop_n "ro.vendor.build.security_patch" "${CURRENT_YEAR}-${CURRENT_MONTH}-05"
 	else

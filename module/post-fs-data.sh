@@ -244,13 +244,9 @@ if [[ "${config_spoof_system_properties}" == "1" ]]; then
 	spoof_system_properties
 fi
 # Spoof OS Security Patch Level Property
-if [[ "${config_spoof_os_security_patch_level_property}" == "1" ]]; then
-	spoof_os_security_patch_level_property
-fi
+spoof_os_security_patch_level_property
 # Spoof Vendor Security Patch Level Property
-if [[ "${config_spoof_vendor_security_patch_level_property}" == "1" ]]; then
-	spoof_vendor_security_patch_level_property
-fi
+spoof_vendor_security_patch_level_property
 
 if [[ "${config_brene_logs}" == "1" ]]; then
 	echo "post-fs-data.sh ✅" >> "${PERSISTENT_DIR}/log.txt"

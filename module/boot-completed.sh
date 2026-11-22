@@ -178,13 +178,9 @@ if [[ "${config_spoof_system_properties}" == "1" ]]; then
 	if_prop_exits_resetprop_n "ro.crypto.state" "encrypted"
 fi
 # Spoof OS Security Patch Level Property
-if [[ "${config_spoof_os_security_patch_level_property}" == "1" ]]; then
-	spoof_os_security_patch_level_property
-fi
+spoof_os_security_patch_level_property
 # Spoof Vendor Security Patch Level Property
-if [[ "${config_spoof_vendor_security_patch_level_property}" == "1" ]]; then
-	spoof_vendor_security_patch_level_property
-fi
+spoof_vendor_security_patch_level_property
 
 ## Remove the '..5.u.S' leftover ##
 ## THe reason why this sus file is created is because users have grant the MANAGE_EXTERNAL_STORAGE permission for the apps that detecting sus files in /storage/emulated/0, or in /storage/emulated/0/Android/data where the apps are exploiting the unicode bugs to create files arbitrary.
