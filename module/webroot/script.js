@@ -76,8 +76,6 @@ const configs = [
 	{ id: 'hide_all_apps_with_uid_10000_and_above' },
 	{ id: 'fix_data_local_tmp_inconsistencies' },
 	{ id: 'spoof_system_properties' },
-	{ id: 'spoof_os_security_patch_level_property' },
-	{ id: 'spoof_vendor_security_patch_level_property' },
 
 	{ id: 'paths_hiding__non_standard_sdcard' },
 	{ id: 'paths_hiding__non_standard_sdcard_android' },
@@ -345,6 +343,25 @@ exec(`cat ${PERSISTENT_DIR}/config.sh`).then((result) => {
 
 	// Verified Boot Hash
 	document.getElementById('vbh_text_field').value = configValues['config_spoof_verified_boot_hash']
+
+	// Security patch date overrides (blank or legacy 1 = automatic; 0 = disabled)
+	const patchDateFields = {
+		os_security_patch_date: 'config_spoof_os_security_patch_level_property',
+		vendor_security_patch_date: 'config_spoof_vendor_security_patch_level_property',
+	}
+	Object.entries(patchDateFields).forEach(([id, configId]) => {
+		const element = document.getElementById(id)
+		const savedValue = configValues[configId] || ''
+		element.value = savedValue === '0' || /^\d{4}-\d{2}-\d{2}$/.test(savedValue) ? savedValue : ''
+		element.addEventListener('change', () => {
+			const value = element.value.trim()
+			if (value && value !== '0' && !/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)) {
+				toast('Invalid date: use YYYY-MM-DD or 0 to disable')
+				return
+			}
+			updateConfig2(configId, value)
+		})
+	})
 
 	// toggle
 	configs.forEach((config) => {

@@ -178,11 +178,11 @@ if [[ "${config_spoof_system_properties}" == "1" ]]; then
 	if_prop_exits_resetprop_n "ro.crypto.state" "encrypted"
 fi
 # Spoof OS Security Patch Level Property
-if [[ "${config_spoof_os_security_patch_level_property}" == "1" ]]; then
+if [[ "${config_spoof_os_security_patch_level_property}" != "0" ]]; then
 	spoof_os_security_patch_level_property
 fi
 # Spoof Vendor Security Patch Level Property
-if [[ "${config_spoof_vendor_security_patch_level_property}" == "1" ]]; then
+if [[ "${config_spoof_vendor_security_patch_level_property}" != "0" ]]; then
 	spoof_vendor_security_patch_level_property
 fi
 
